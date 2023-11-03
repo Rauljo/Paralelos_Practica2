@@ -34,6 +34,8 @@ int main(int argc, char** argv) {
                             }
                     }
             }
+            
+            printf("Hola desde %d nodo\n", rank);
 
             /* Broadcasting the row, column size of Matrix A as well as strip size and Matrix B*/
             MPI_Bcast(&A_row, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -51,6 +53,18 @@ int main(int argc, char** argv) {
             }
 
             MPI_Scatter(Adata, 1, strip, &(strip_A[0][0]), 1, strip, 0, MPI_COMM_WORLD);
+            
+            printf("Duplicando desde %d nodo\n", rank);
+            
+            for i=0; i<strip_size; i++){
+            	for (j=0; j<A_col;j++){
+            		strip_A[i][j] *= 2
+            	}
+            }
+            
+            MPI_Gather(&(strip_A[0][0]), 1, strip, Adata, 1, 0, MPI_COMM_WORLD);
+            
+            
 
             for(i = 0; i < strip_size; i++) {
                     if(i == 0) {
@@ -61,6 +75,7 @@ int main(int argc, char** argv) {
                     }
                     printf("\n");
             }
+        
 
     MPI_Type_free(&strip);
     free(strip_A);
