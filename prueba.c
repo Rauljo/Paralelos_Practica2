@@ -56,21 +56,21 @@ int main(int argc, char** argv) {
             
             printf("Duplicando desde %d nodo\n", rank);
             
-            for i=0; i<strip_size; i++){
-            	for (j=0; j<A_col;j++){
-            		strip_A[i][j] *= 2
+            for (int i=0; i<strip_size; i++){
+            	for (int j=0; j<A_col;j++){
+            		strip_A[i][j] *= 2;
             	}
             }
             
-            MPI_Gather(&(strip_A[0][0]), 1, strip, Adata, 1, 0, MPI_COMM_WORLD);
+            MPI_Gather(&(strip_A[0][0]), 1, strip, Adata, 1, strip, 0, MPI_COMM_WORLD);
             
             
 
-            for(i = 0; i < strip_size; i++) {
+            for(int i = 0; i < strip_size; i++) {
                     if(i == 0) {
                             printf("rank = %d\n", rank);
                     }
-                    for(j = 0; j < A_col; j++) {
+                    for(int j = 0; j < A_col; j++) {
                             printf("%lf  ", strip_A[i][j]);
                     }
                     printf("\n");
